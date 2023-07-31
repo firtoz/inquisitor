@@ -1,0 +1,12 @@
+{
+    "verbose": true,
+    "watch": [
+        "src/**/*.ts",
+        "tsconfig.json",
+        "dev.tsconfig.json"
+    ],
+    "ignore": [
+        "lib"
+    ],
+    "ext": "*"
+}

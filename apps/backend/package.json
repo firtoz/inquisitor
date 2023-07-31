@@ -1,0 +1,65 @@
+{
+    "name": "backend",
+    "version": "1.5.0",
+    "description": "",
+    "scripts": {
+        "dev": "concurrently \"npm run dev:server\" \"npm run dev:gql\"",
+        "dev:server": "nodemon ./src/index.ts",
+        "dev:gql": "nodemon --config './gql.nodemon.json' ./scripts/build.ts",
+        "build": "rimraf ./lib/ && tsc && echo build complete",
+        "build:gql": "ts-node ./scripts/build.ts",
+        "start": "dotenv -- pm2 startOrRestart ecosystem.config.js",
+        "stop": "dotenv -- pm2 stop ecosystem.config.js --env production",
+        "test": "eslint . && vitest run",
+        "vitest": "vitest",
+        "lint": "eslint . --fix"
+    },
+    "keywords": [
+        "typescript"
+    ],
+    "files": [
+        "lib/*",
+        "src/*"
+    ],
+    "types": "lib/index.d.ts",
+    "main": "lib/index.js",
+    "devDependencies": {
+        "@types/cors": "^2.8.13",
+        "@types/express": "^4.17.17",
+        "@types/express-ws": "^3.0.1",
+        "@types/localtunnel": "^2.0.1",
+        "@types/lodash": "^4.14.196",
+        "@types/node": "^20.4.5",
+        "@types/uuid": "^9.0.2",
+        "@typescript-eslint/eslint-plugin": "^6.2.1",
+        "@typescript-eslint/parser": "^6.2.1",
+        "eslint": "^8.46.0",
+        "eslint-config-custom": "*",
+        "nodemon": "^3.0.1",
+        "rimraf": "^5.0.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.1.6",
+        "vite": "^4.4.7",
+        "vitest": "^0.33.0"
+    },
+    "dependencies": {
+        "@fastify/cors": "^8.3.0",
+        "@graphql-codegen/client-preset": "^4.1.0",
+        "@graphql-codegen/core": "^4.0.0",
+        "@graphql-codegen/typescript": "^4.0.1",
+        "@graphql-codegen/typescript-react-query": "^4.1.0",
+        "common": "*",
+        "concurrently": "^8.2.0",
+        "dotenv": "^16.3.1",
+        "fastify": "^4.21.0",
+        "graphql": "^16.7.1",
+        "graphql-query-complexity": "^0.12.0",
+        "mercurius": "^13.1.0",
+        "mercurius-codegen": "^5.0.3",
+        "prettier": "^3.0.0",
+        "reflect-metadata": "^0.1.13",
+        "schemas": "*",
+        "type-graphql": "2.0.0-beta.2",
+        "uuid": "^9.0.0"
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "references": [
+        {
+            "path": "../../packages/common"
+        }
+    ],
+    "compilerOptions": {
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "module": "commonjs",
+        "target": "ESNext",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "strictFunctionTypes": true,
+        "allowJs": true,
+        "forceConsistentCasingInFileNames": true,
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "declaration": true,
+        "sourceMap": true,
+        "moduleResolution": "nodenext",
+        "strictNullChecks": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "paths": {
+            "common": [
+                "../../packages/common"
+            ],
+            "schemas": [
+                "../../packages/schemas"
+            ],
+        }
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}

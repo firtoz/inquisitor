@@ -1,0 +1,52 @@
+fragment TodoItemFields on TodoItem {
+    id
+    title
+    description
+    creationDate
+    completedDate
+    listId
+    done
+}
+
+fragment TodoListFields on TodoList {
+    id
+    name
+    description
+    creationDate
+}
+
+query TodoItemsForList($listId: String!) {
+    todoItemsForList(listId: $listId) {
+        ...TodoItemFields
+    }
+}
+
+query TodoLists {
+    todoLists {
+        ...TodoListFields
+    }
+}
+
+
+mutation CreateTodoItem($title: String!, $description: String!, $listId: String!) {
+    addTodoItem(title: $title, description: $description, listId: $listId) {
+        ...TodoItemFields
+    }
+}
+
+mutation CreateTodoList($name: String!, $description: String!) {
+    addTodoList(name: $name, description: $description) {
+        ...TodoListFields
+    }
+}
+
+mutation DeleteTodoItem($id: String!) {
+    deleteTodoItem(id: $id)
+}
+
+mutation MarkTodoItemAsDone($id: String!, $done: Boolean!) {
+    markTodoItemAsDone(id: $id, done: $done) {
+        ...TodoItemFields
+    }
+}
+

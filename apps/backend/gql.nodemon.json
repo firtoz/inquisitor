@@ -1,0 +1,12 @@
+{
+    "watch": [
+        ".env.*",
+        "scripts/**/*.ts",
+        "scripts/tsconfig.json",
+        "src/schemas/**/*.ts",
+        "gql.nodemon.json",
+        "package.json"
+    ],
+    "verbose": true,
+    "ext": "*"
+}

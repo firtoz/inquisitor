@@ -1,0 +1,32 @@
+{
+  "name": "schemas",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "types": "src/index.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"yarn dev:generate\" \"yarn dev:build\"",
+    "dev:build": "nodemon --config './nodemon.json' --exec 'yarn clean && tsc -p ./dev.tsconfig.json'",
+    "dev:generate": "yarn generate --watch \"src/**/*.(ts|gql)\"",
+    "generate": "graphql-codegen --config ./scripts/codegen.ts",
+    "clean": "rimraf ./lib/ && rimraf tsconfig.tsbuildinfo",
+    "build": "yarn generate && yarn clean && tsc && echo \"Build complete.\""
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@parcel/watcher": "^2.2.0",
+    "nodemon": "^3.0.1",
+    "rimraf": "^5.0.1",
+    "tsconfig": "*",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@firtoz/openai-wrappers": "^3.0.3",
+    "concurrently": "^8.2.0",
+    "graphql-request": "^6.1.0"
+  }
+}

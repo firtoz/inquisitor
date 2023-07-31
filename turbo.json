@@ -1,0 +1,27 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "globalDependencies": [
+        "**/.env.*local"
+    ],
+    "globalEnv": [
+        "SERVER_PORT",
+        "NODE_ENV",
+        "APP_MODE",
+        "NEXT_PUBLIC_DOMAIN",
+        "NEXT_PUBLIC_LANDING_URL"
+    ],
+    "pipeline": {
+        "start": {
+            "cache": false
+        },
+        "stop": {
+            "cache": false
+        },
+        "build": {},
+        "lint": {},
+        "dev": {
+            "cache": false,
+            "persistent": true
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "name": "common",
+    "version": "0.0.0",
+    "main": "lib/index.js",
+    "types": "src/index.ts",
+    "files": [
+        "lib/**/*"
+    ],
+    "license": "MIT",
+    "scripts": {
+        "dev": "nodemon --config './nodemon.json' --exec 'yarn clean && tsc -p ./dev.tsconfig.json'",
+        "build": "yarn clean && tsc && echo \"Build complete.\"",
+        "clean": "rimraf ./lib/ && rimraf tsconfig.tsbuildinfo",
+        "lint": "eslint \"**/*.ts*\""
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1",
+        "rimraf": "^5.0.1",
+        "typescript": "^5.1.6"
+    },
+    "dependencies": {
+        "@firtoz/openai-wrappers": "^3.0.3"
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "extends": [
+        "//"
+    ],
+    "pipeline": {
+        "build": {
+            "dependsOn": [
+                "backend#build:gql"
+            ],
+            "outputs": [
+                "lib/**"
+            ],
+            "inputs": [
+                "src/**",
+                "scripts/**"
+            ]
+        }
+    }
+}

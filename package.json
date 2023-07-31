@@ -1,0 +1,41 @@
+{
+    "private": true,
+    "name": "turbo-template",
+    "scripts": {
+        "build": "dotenv -- turbo run build",
+        "build:frontend": "dotenv -- turbo run build --filter=frontend",
+        "build:backend": "dotenv -- turbo run build --filter=backend",
+        "build:common": "dotenv -- turbo run build --filter=common",
+        "build:schemas": "dotenv -- turbo run build --filter=schemas",
+        "prod-frontend": "yarn run build:frontend",
+        "prod-server": "yarn run build:server",
+        "check-pm2-installed": "pm2 -v || echo 'pm2 not installed, please run `yarn global add pm2`'",
+        "start": "yarn check-pm2 && dotenv -- turbo run start",
+        "stop": "dotenv -- turbo run stop",
+        "dev": "turbo daemon clean && dotenv -- turbo run dev",
+        "lint": "dotenv -- turbo run lint",
+        "format": "dotenv -- prettier --write \"**/*.{ts,tsx,md,gql}\""
+    },
+    "devDependencies": {
+        "prettier": "^3.0.0",
+        "turbo": "^1.10.12"
+    },
+    "packageManager": "yarn@3.5.1",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "cacheDirectories": [
+        "apps/frontend/node_modules",
+        "apps/frontend/.turbo",
+        "apps/frontend/.next/cache",
+        "apps/server/node_modules",
+        "apps/server/.turbo",
+        "packages/common/node_modules",
+        "packages/eslint-config-custom/node_modules",
+        "packages/ui/node_modules"
+    ],
+    "dependencies": {
+        "dotenv-cli": "^7.2.1"
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "extends": [
+        "//"
+    ],
+    "pipeline": {
+        "build": {
+            "dependsOn": [
+                "common#build",
+                "backend#build:gql"
+            ],
+            "outputs": [
+                "lib/**"
+            ],
+            "inputs": [
+                "src/**",
+                "tsconfig.json"
+            ]
+        },
+        "build:gql": {
+            "outputs": [
+                "../../packages/schemas/src/generated/gql/schema.gql"
+            ],
+            "inputs": [
+                "src/**",
+                "scripts/**",
+                "tsconfig.json"
+            ]
+        },
+        "dev": {
+        },
+        "start": {}
+    }
+}

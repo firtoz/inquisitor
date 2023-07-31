@@ -1,0 +1,13 @@
+{
+    "watch": [
+        ".env",
+        ".env.*",
+        "nodemon.json",
+        "package.json",
+        "../../packages/common/src/**/*",
+        "../../packages/schemas/lib/**/*",
+        "!.next/**/*"
+    ],
+    "verbose": true,
+    "ext": "*"
+}

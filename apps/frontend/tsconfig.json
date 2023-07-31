@@ -1,0 +1,37 @@
+{
+    "extends": "tsconfig/nextjs.json",
+    "references": [
+        {
+            "path": "../../packages/common"
+        }
+    ],
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        ".turbo"
+    ],
+    "compilerOptions": {
+        "baseUrl": ".",
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "paths": {
+            "common/lib/*": [
+                "../../packages/common/src/*"
+            ],
+            "schemas": [
+                "../../packages/schemas/src/index.ts"
+            ],
+            "schemas/lib/*": [
+                "../../packages/schemas/src/*"
+            ]
+        }
+    }
+}

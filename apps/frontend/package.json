@@ -1,0 +1,50 @@
+{
+    "name": "frontend",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "node ./scripts/dev.js",
+        "build": "dotenv -- next build",
+        "start": "dotenv -- pm2 startOrRestart ecosystem.config.js --env production",
+        "stop": "dotenv -- pm2 stop ecosystem.config.js --env production",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@tanstack/react-query": "^4.32.0",
+        "autosize": "^6.0.1",
+        "axios": "^1.4.0",
+        "bootstrap": "^5.3.1",
+        "bootstrap-icons": "^1.10.5",
+        "bufferutil": "^4.0.7",
+        "classnames": "^2.3.2",
+        "common": "*",
+        "dotenv": "^16.3.1",
+        "dotenv-cli": "^7.2.1",
+        "gpt3-tokenizer": "^1.1.5",
+        "graphql-request": "^6.1.0",
+        "jotai": "^2.2.3",
+        "lodash": "^4.17.21",
+        "luxon": "^3.3.0",
+        "next": "13.4.12",
+        "next-plausible": "^3.10.1",
+        "nodemon": "^3.0.1",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "sass": "^1.64.1",
+        "schemas": "*",
+        "sharp": "^0.32.4",
+        "utf-8-validate": "^6.0.3",
+        "zustand": "^4.3.9"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.14.196",
+        "@types/luxon": "^3.3.1",
+        "@types/node": "20.4.5",
+        "@types/react": "18.2.17",
+        "@types/react-dom": "18.2.7",
+        "eslint": "8.46.0",
+        "eslint-config-custom": "*",
+        "tsconfig": "*",
+        "typescript": "5.1.6"
+    }
+}

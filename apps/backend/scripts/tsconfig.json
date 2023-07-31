@@ -1,0 +1,16 @@
+{
+    "extends": "../tsconfig.json",
+    "include": [
+        "./*.ts",
+        "../src/schemas/**/*.ts",
+    ],
+    "exclude": [
+        "lib",
+        "node_modules",
+        ".turbo"
+    ],
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+    }
+}

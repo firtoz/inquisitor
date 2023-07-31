@@ -1,0 +1,15 @@
+{
+    "watch": [
+        ".env",
+        ".env.*",
+        "src/**/*.ts",
+        "nodemon.json",
+        "package.json",
+        "../../packages/common/src/**/*",
+        "../../packages/schemas/src/gql/**/*.gql",
+        "../../packages/schemas/src/fetcher.ts",
+        "../../packages/schemas/src/index.ts"
+    ],
+    "verbose": true,
+    "ext": "*"
+}
