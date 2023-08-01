@@ -19,7 +19,7 @@ const title = 'Example Title';
 const description = 'Example Description';
 const opengraphImage = 'https://placehold.co/600x400.png';
 
-const HOST_URI = process.env['NEXT_PUBLIC_DOMAIN'] ;
+const HOST_URI = process.env['NEXT_PUBLIC_DOMAIN'] ?? 'http://localhost:3000';
 const PLAUSIBLE_DOMAIN = process.env['NEXT_PLAUSIBLE_DOMAIN'];
 
 export const metadata: Metadata = {

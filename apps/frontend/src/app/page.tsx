@@ -4,18 +4,25 @@ import React from 'react';
 
 import './page.module.css';
 
+import jsonToTs from 'json-to-ts';
+
 import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
+
+import {Configuration, OpenAIApi} from 'openai';
+
+const openai = new OpenAIApi(new Configuration({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+}));
+
 import {
-    useTodoItemsForListQuery,
-    useTodoListsQuery,
-    useMarkTodoItemAsDoneMutation,
-    useCreateTodoListMutation,
-    useCreateTodoItemMutation, TodoItemFieldsFragment,
-} from "schemas";
-import classNames from "classnames";
+    ChatStreamDelta,
+    CustomCompletionError,
+    getChatCompletionAdvanced, getChatCompletionSimple,
+} from '@firtoz/openai-wrappers';
+
 
 // Create a client
 const queryClient = new QueryClient({
@@ -26,162 +33,91 @@ const queryClient = new QueryClient({
     },
 });
 
-function TodoItem({
-                      todo,
-                      refetch,
-                  }: {
-    todo: TodoItemFieldsFragment,
-    refetch: () => Promise<any>,
-}) {
-    const {
-        mutateAsync: markTodoItemAsDone,
-    } = useMarkTodoItemAsDoneMutation();
+const onFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+        return;
+    }
 
-    return <div className="row">
-        <div className="col-md-1">
-            <input type="checkbox" checked={todo.done} onChange={
-                async (event) => {
-                    await markTodoItemAsDone({
-                        id: todo.id,
-                        done: event.target.checked,
-                    });
+    const fileName = file.name;
+    const fileType = file.type;
 
-                    await refetch();
-                }
-            }/>
-        </div>
-        <div className="col-md-10">
-            {todo.title}
-        </div>
+    console.log(process.env['NEXT_PUBLIC_OPENAI_API_KEY']);
+
+    // if file is a json file, create typescript types
+    // if file is a csv file, just do a console.log for now
+
+    if (fileType === 'application/json') {
+        const reader = new FileReader();
+        reader.onload = async () => {
+            const json = JSON.parse(reader.result as string);
+
+            let isRootArray = Array.isArray(json);
+
+            const types = jsonToTs(json, {
+                rootName: isRootArray ? 'RootItem' : 'Root',
+            });
+
+            if (isRootArray) {
+                types.unshift('type Root = RootItem[];');
+            }
+
+            console.log({
+                fileName,
+                fileType,
+                json,
+                types: types.join('\n\n'),
+            });
+
+            const prompt = `The user will provide the contents of a typescript file. 
+
+You will simplify this file.
+
+Simplify the types by doing the following:
+Merge redundant interfaces and fields.
+For example if one interface Interface1 has a field called fieldOne and another interface Interface2 has a field called fieldOne and fieldTwo, then merge these two interfaces into one interface called Interface1, and remove Interface2.
+Remove interfaces that are not used.
+Then respond only with the simplified typescript output.`;
+
+            console.log('Getting simplified typescript...');
+
+            const simplifiedTypes = await getChatCompletionSimple({
+                openai,
+                messages: [
+                    {
+                        role: 'system',
+                        content: prompt,
+                    },
+                    {
+                        role: 'user',
+                        content: types.join('\n\n'),
+                    }
+                ], options: {
+                    model: 'gpt-3.5-turbo-16k-0613',
+                },
+            });
+
+            console.log('Got simplified typescript.', simplifiedTypes);
+
+        };
+        reader.readAsText(file);
+    } else if (fileType === 'text/csv') {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const csv = reader.result as string;
+            console.log(csv);
+        };
+        reader.readAsText(file);
+    } else {
+        console.log(`Unknown file type: ${fileType}`);
+    }
+}
+
+const Page = () => {
+    return <div>
+        <h1>JSON to TS</h1>
+        <input type="file" onChange={onFileSelected}/>
     </div>;
-}
-
-function TodoList(props: { todoListId: string }) {
-    const {
-        data,
-        refetch,
-    } = useTodoItemsForListQuery({
-        listId: props.todoListId,
-    }, {
-        suspense: true,
-    });
-
-    const {
-        mutateAsync: createTodoItem,
-    } = useCreateTodoItemMutation();
-
-    const todos = data.todoItemsForList;
-
-    return (
-        <div>
-            <ul className="list-group">
-                {todos.map((todo) => {
-                    return <li key={todo.id} className="list-group-item">
-                        <TodoItem
-                            todo={todo}
-                            refetch={refetch}
-                        />
-                    </li>
-                })}
-                <li className="list-group-item">
-                    <div className="row">
-                        <div className="col-md-1">
-                            <input type="checkbox" checked={false} onChange={() => {
-                            }} disabled={true}/>
-                        </div>
-                        <div className="col-md-10">
-                            <button
-                                className="btn btn-link"
-                                onClick={async () => {
-                                    const title = prompt('Enter title for new todo item');
-
-                                    if (title) {
-                                        await createTodoItem({
-                                            listId: props.todoListId,
-                                            title,
-                                            description: '',
-                                        });
-
-                                        await refetch();
-                                    }
-                                }}
-                            >Add Todo Item
-                            </button>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    )
-}
-
-const Todos = () => {
-    const {
-        data,
-        refetch,
-    } = useTodoListsQuery(undefined, {
-        suspense: true,
-    });
-
-    const [selectedTodoList, setSelectedTodoList] = React.useState(0);
-
-    const {
-        mutateAsync: createTodoList,
-    } = useCreateTodoListMutation();
-
-    return (
-        <div>
-            <h1>Todo Lists</h1>
-            <ul className="nav nav-tabs">
-                {data.todoLists.map((todoList, index) => {
-                    return <li
-                        key={todoList.id}
-                        className={
-                            classNames('nav-item', {
-                                'active': index === selectedTodoList
-                            })}
-                    >
-                        <a
-                            className={
-                                classNames('nav-link', {
-                                    'active': index === selectedTodoList
-                                })}
-                            onClick={() => setSelectedTodoList(index)}
-                            style={{cursor: 'pointer'}}
-                        >{todoList.name}</a>
-                    </li>
-                })}
-                <li className="nav-item">
-                    <a
-                        className="nav-link"
-                        style={{cursor: 'pointer'}}
-                        onClick={async () => {
-                            const name = prompt('Enter name for new todo list');
-
-                            if (name) {
-                                await createTodoList({
-                                    name,
-                                    description: '',
-                                });
-
-                                await refetch();
-
-                                setSelectedTodoList(data.todoLists.length);
-                            }
-                        }}
-                    >Add Todo List</a>
-                </li>
-            </ul>
-            <div className="row">
-                <div className="col-md-12">
-                    <h2>Todo List</h2>
-                    <React.Suspense fallback="Loading...">
-                        <TodoList todoListId={data.todoLists[selectedTodoList].id}/>
-                    </React.Suspense>
-                </div>
-            </div>
-        </div>
-    )
 }
 
 const MainPage = () => {
@@ -198,7 +134,7 @@ const MainPage = () => {
     return <div>
         <QueryClientProvider client={queryClient}>
             <React.Suspense fallback="Loading...">
-                <Todos/>
+                <Page/>
             </React.Suspense>
         </QueryClientProvider>
     </div>

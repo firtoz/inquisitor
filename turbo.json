@@ -8,6 +8,7 @@
         "NODE_ENV",
         "APP_MODE",
         "NEXT_PUBLIC_DOMAIN",
+        "NEXT_PUBLIC_OPENAI_API_KEY",
         "NEXT_PUBLIC_LANDING_URL"
     ],
     "pipeline": {
